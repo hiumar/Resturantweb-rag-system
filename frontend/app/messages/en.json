@@ -144,5 +144,8 @@
   "chatMenuPrompt": "Where can I find the menu?",
   "chatLocationPrompt": "Where are you located?",
   "chatReservationsPrompt": "How can I make a reservation?",
-  "conversation": "Conversation"
+  "conversation": "Conversation",
+  "demoTitle": "Non-commercial demo",
+  "demoNotice": "Orders and reservations are previews only.",
+  "demoPrepared": "Preview prepared. No message was sent."
 }

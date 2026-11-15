@@ -10,7 +10,7 @@ from datetime import date
 from typing import Literal
 
 from fastapi import FastAPI, HTTPException, Request, Response
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, JSONResponse
 from pydantic import BaseModel, ConfigDict, Field, TypeAdapter, ValidationError
 from starlette.concurrency import run_in_threadpool
 
@@ -22,6 +22,15 @@ from restaurant_offers import add_offer, dubai_today, list_offers, remove_offer
 
 app = FastAPI(title=RESTAURANT_NAME)
 logger = logging.getLogger(__name__)
+
+
+@app.middleware("http")
+async def require_backend_token(request: Request, call_next):
+    expected = os.getenv("CREW_API_TOKEN", "")
+    supplied = request.headers.get("x-crew-api-token", "")
+    if expected and not hmac.compare_digest(expected.encode(), supplied.encode()):
+        return JSONResponse({"detail": "Unauthorized."}, status_code=401)
+    return await call_next(request)
 
 
 class Message(BaseModel):
@@ -60,7 +69,7 @@ def chat(request: ChatRequest):
         "answer": reply.answer,
         "faq": reply.used_faq,
         "staff": reply.refer_to_staff,
-        "contact": contact if reply.refer_to_staff else None,
+        "contact": contact if reply.refer_to_staff and os.getenv("PAK_FOOD_DEMO") != "1" else None,
     }
 
 

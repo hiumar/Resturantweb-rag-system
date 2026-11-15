@@ -80,7 +80,7 @@ function dubaiDate() {
   return new Intl.DateTimeFormat('sv-SE', {timeZone: 'Asia/Dubai', year: 'numeric', month: '2-digit', day: '2-digit'}).format(new Date());
 }
 
-export function Reservation({restaurantName, phoneHref}) {
+export function Reservation({demo, restaurantName, phoneHref}) {
   const t = useTranslations();
   const [request, setRequest] = useState('');
   const schema = z.object({
@@ -93,7 +93,7 @@ export function Reservation({restaurantName, phoneHref}) {
   const {register, handleSubmit, formState: {errors}} = useForm({resolver: zodResolver(schema), defaultValues: {guests: 2, phone: ''}});
 
   function prepare(details) {
-    setRequest(whatsappLink(t('bookingDraft', {...details, name: restaurantName, guest: details.name})));
+    setRequest(demo ? 'preview' : whatsappLink(t('bookingDraft', {...details, name: restaurantName, guest: details.name})));
   }
 
   return (
@@ -101,7 +101,7 @@ export function Reservation({restaurantName, phoneHref}) {
       <div className="reservation-card glass">
         <div className="section-heading">
           <div><p className="eyebrow">{t('plan')}</p><h2 id="reservation-title">{t('bookTitle')}</h2></div>
-          <p>{t('reserveNote')} <a href={phoneHref}>{t('callRestaurant')}</a>.</p>
+          <p>{demo ? t('demoNotice') : <>{t('reserveNote')} <a href={phoneHref}>{t('callRestaurant')}</a>.</>}</p>
         </div>
         <form className="reservation-form" onSubmit={handleSubmit(prepare)} onChange={() => setRequest('')} noValidate>
           {[
@@ -120,7 +120,7 @@ export function Reservation({restaurantName, phoneHref}) {
           </label>
           <button className="gold-button" type="submit">{t('prepare')} <ArrowRight size={17}/></button>
         </form>
-        {request && <p className="reservation-confirm" role="status"><a href={request} target="_blank" rel="noreferrer">{t('sendReservation')}</a></p>}
+        {request && <p className="reservation-confirm" role="status">{demo ? t('demoPrepared') : <a href={request} target="_blank" rel="noreferrer">{t('sendReservation')}</a>}</p>}
       </div>
     </section>
   );

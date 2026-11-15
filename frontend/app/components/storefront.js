@@ -9,7 +9,7 @@ import {FoodGallery, Reservation, Reviews} from './guest-extras';
 import {StorefrontProviders} from './motion';
 import StoreNav from './store-nav';
 
-export default function Storefront({name, brand, links, dishes, phoneHref, hero, offers, footer, chat}) {
+export default function Storefront({name, demo, brand, links, dishes, phoneHref, hero, offers, footer, chat}) {
   const t = useTranslations();
   const [remember, setRemember] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
@@ -51,15 +51,16 @@ export default function Storefront({name, brand, links, dishes, phoneHref, hero,
       <div id="top" className="restaurant">
         <StoreNav name={name} brand={brand} links={links} count={count} openCart={() => setCartOpen(true)} />
         {hero}
+        {demo && <p className="demo-notice section-shell" role="note"><strong>{t('demoTitle')}</strong> · {t('demoNotice')}</p>}
         {offers}
         <MenuSection dishes={dishes} add={key => {change(key, 1); setCartOpen(true);}} />
         <FoodGallery />
         <Reviews />
-        <Reservation restaurantName={name} phoneHref={phoneHref} />
+        <Reservation demo={demo} restaurantName={name} phoneHref={phoneHref} />
         {footer}
         {chat}
-        <a className="whatsapp-fab" href={whatsappLink()} target="_blank" rel="noreferrer" aria-label={t('whatsapp')}><MessageCircle size={23}/></a>
-        <Cart open={cartOpen} onClose={() => setCartOpen(false)} items={items} change={change} restaurantName={name} />
+        {!demo && <a className="whatsapp-fab" href={whatsappLink()} target="_blank" rel="noreferrer" aria-label={t('whatsapp')}><MessageCircle size={23}/></a>}
+        <Cart demo={demo} open={cartOpen} onClose={() => setCartOpen(false)} items={items} change={change} restaurantName={name} />
       </div>
     </StorefrontProviders>
   );

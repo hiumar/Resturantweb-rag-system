@@ -1,0 +1,15 @@
+**
+!requirements.txt
+!web_api.py
+!faq_admin.py
+!multiagentcrew.py
+!restaurant_branding.py
+!restaurant_menu.py
+!restaurant_offers.py
+!frontend/
+frontend/**
+!frontend/restaurant.json
+!output/
+!output/pdf/
+output/pdf/**
+!output/pdf/Pakfood_FAQ.pdf

@@ -37,7 +37,7 @@ function checkoutSchema(t) {
   });
 }
 
-export default function UaeCheckout({total, allPriced, message}) {
+export default function UaeCheckout({demo, total, allPriced, message}) {
   const t = useTranslations();
   const locale = useLocale();
   const [draft, setDraft] = useState(null);
@@ -68,7 +68,7 @@ export default function UaeCheckout({total, allPriced, message}) {
       ...(allPriced && deliveryFee !== null ? [`${t('total')}: ${aed(final)}${vatRate > 0 ? ` (${t('vat', {rate: vatRate})}: ${aed(vat)})` : ''}`] : [t('pending')]),
       t('confirmOrder'),
     ];
-    setDraft({message, href: whatsappLink(lines.filter(Boolean).join('\n'))});
+    setDraft({message, href: demo ? null : whatsappLink(lines.filter(Boolean).join('\n'))});
   }
 
   function field(name, label, props = {}) {
@@ -100,7 +100,7 @@ export default function UaeCheckout({total, allPriced, message}) {
         {Object.entries(paymentOptions).map(([key, label]) => <option key={key} value={key}>{label}</option>)}
         {['Tabby', 'Tamara'].map(label => <option key={label} disabled>{label} · {t('unavailable')}</option>)}
       </select></label>
-      <p>{t('payNote')}</p>
+      <p>{t(demo ? 'demoNotice' : 'payNote')}</p>
       <dl className="checkout-totals">
         <div><dt>{t('subtotal')}</dt><dd>{aed(total)}</dd></div>
         {delivery && <div><dt>{t('fee')}</dt><dd>{deliveryFee === null ? t('quote') : aed(deliveryFee)}</dd></div>}
@@ -109,6 +109,6 @@ export default function UaeCheckout({total, allPriced, message}) {
       </dl>
       <button className="gold-button" type="submit">{t('prepare')}</button>
     </form>
-    {draft?.message === message && <p role="status"><a className="gold-button" href={draft.href} target="_blank" rel="noreferrer">{t('sendOrder')}</a></p>}
+    {draft?.message === message && <p role="status">{demo ? t('demoPrepared') : <a className="gold-button" href={draft.href} target="_blank" rel="noreferrer">{t('sendOrder')}</a>}</p>}
   </section>;
 }

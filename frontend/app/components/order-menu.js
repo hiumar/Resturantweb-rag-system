@@ -54,7 +54,7 @@ export function MenuSection({dishes, add}) {
   );
 }
 
-export function Cart({open, onClose, items, change, restaurantName}) {
+export function Cart({demo, open, onClose, items, change, restaurantName}) {
   const t = useTranslations();
   const lines = items.map(dish => ({...dish, unitPrice: getDishPrice(dish)}));
   const total = lines.reduce((sum, {unitPrice, quantity}) => sum + (unitPrice?.currency === 'AED' ? unitPrice.minorUnits * quantity : 0), 0);
@@ -85,7 +85,7 @@ export function Cart({open, onClose, items, change, restaurantName}) {
               </li>
             ))}
           </ul>
-          <UaeCheckout total={total} allPriced={allPriced} message={message} />
+          <UaeCheckout demo={demo} total={total} allPriced={allPriced} message={message} />
         </>
       )}
     </Dialog>

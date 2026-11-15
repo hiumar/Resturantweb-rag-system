@@ -23,7 +23,7 @@ function BrandMark({logo}) {
     : <span className="brand-emblem"><Flame size={22} aria-hidden="true"/></span>;
 }
 
-function Hero({t, locale}) {
+function Hero({t, locale, demo}) {
   return (
     <>
       <section className="hero" aria-labelledby="hero-title">
@@ -41,7 +41,7 @@ function Hero({t, locale}) {
         </div>
         <a href="#visit" className="hero-scroll" aria-label={t('info')}><ArrowDown size={20}/></a>
       </section>
-      {(uae.directPromotion || uae.talabatUrl || uae.deliverooUrl) && <div className="section-shell direct-promo">
+      {!demo && (uae.directPromotion || uae.talabatUrl || uae.deliverooUrl) && <div className="section-shell direct-promo">
         {uae.directPromotion && <p><a href="#menu">{t('save')}</a> · {uae.directPromotion[locale] || uae.directPromotion.en}</p>}
         {uae.talabatUrl && <a href={uae.talabatUrl} target="_blank" rel="noreferrer">Talabat</a>}
         {uae.deliverooUrl && <a href={uae.deliverooUrl} target="_blank" rel="noreferrer">Deliveroo</a>}
@@ -49,8 +49,8 @@ function Hero({t, locale}) {
       <div className="section-shell visit-shell" id="visit">
         <div className="visit-strip glass">
           <a href={directions} target="_blank" rel="noreferrer"><span className="detail-icon"><MapPin size={20}/></span><span><small>{t('find')}</small><strong>{t('dubai')}</strong><span>{t('address')}</span></span></a>
-          <a href={phoneHref}><span className="detail-icon"><Clock size={20}/></span><span><small>{t(uae.ramadan?.enabled ? 'ramadanHours' : 'hours')}</small><OpeningStatus/><span>{t('callHours')}</span></span></a>
-          <a href={phoneHref}><span className="detail-icon"><Phone size={19}/></span><span><small>{t('tables')}</small><strong dir="ltr">{phone}</strong><span>{t('callAhead')}</span></span></a>
+          <a href={demo ? '#reservation' : phoneHref}><span className="detail-icon"><Clock size={20}/></span><span><small>{t(uae.ramadan?.enabled ? 'ramadanHours' : 'hours')}</small><OpeningStatus/><span>{t('callHours')}</span></span></a>
+          <a href={demo ? '#reservation' : phoneHref}><span className="detail-icon"><Phone size={19}/></span><span><small>{t('tables')}</small><strong dir={demo ? undefined : 'ltr'}>{demo ? t('demoTitle') : phone}</strong><span>{t('callAhead')}</span></span></a>
         </div>
       </div>
     </>
@@ -80,6 +80,7 @@ function Offers({offers, t, locale}) {
 
 export default async function Page() {
   const [{name, logoVersion}, {items}, {offers}, {locale, messages}] = await Promise.all([getBranding(), getMenu(), getOffers(), getStoreLocale()]);
+  const demo = process.env.PAK_FOOD_DEMO === '1';
   const t = createTranslator({locale, messages});
   const logo = logoVersion ? `/api/branding/logo?v=${logoVersion}` : null;
   const dishes = [...featuredDishes, ...items].map(dish => {
@@ -94,13 +95,13 @@ export default async function Page() {
   links.push([t('visit'), '#visit'], [t('reservations'), '#reservation']);
 
   return <NextIntlClientProvider locale={locale} messages={messages} timeZone="Asia/Dubai"><Storefront
-    name={name} dishes={dishes} links={links} phoneHref={phoneHref}
+    name={name} demo={demo} dishes={dishes} links={links} phoneHref={phoneHref}
     brand={<a className="site-brand" href="#top"><BrandMark logo={logo}/><span>{name}<small>{t('pakistani')}</small></span></a>}
-    hero={<Hero t={t} locale={locale}/> }
+    hero={<Hero t={t} locale={locale} demo={demo}/> }
     offers={<Offers offers={offers} t={t} locale={locale}/>}
     footer={<footer className="site-footer section-shell">
       <a className="site-brand" href="#top"><BrandMark logo={logo}/>{name}</a>
-      <a href="mailto:contact@pakfood.com">contact@pakfood.com</a>
+      {!demo && <a href="mailto:contact@pakfood.com">contact@pakfood.com</a>}
       <a href="/admin">{t('admin')}</a>
       <div className="restaurant-credentials">
         {uae.tradeLicense && <span>{t('license')}: <bdi>{uae.tradeLicense}</bdi></span>}

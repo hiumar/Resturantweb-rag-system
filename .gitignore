@@ -1,27 +1,14 @@
-# Python virtual environments
-crewai-env/
-venv/
-.venv/
-env/
-__pycache__/
-*.pyc
-
-# Node
-node_modules/
-.next/
-out/
-dist/
-
-# Secrets
 .env
-.env.local
-.env.*.local
+__pycache__/
+frontend/node_modules/
+frontend/.next/
+db/active_faq.pdf
+db/restaurant_branding.sqlite3*
 
-# OS / editor
-.DS_Store
-.vscode/
-.idea/
+db/restaurant_menu.sqlite3*
+db/restaurant_offers.sqlite3*
 
-# Vector DBs / large data (add if you have them)
-*.lance
-chroma_db/
+frontend/.env.local
+
+.vercel/
+frontend/.vercel/

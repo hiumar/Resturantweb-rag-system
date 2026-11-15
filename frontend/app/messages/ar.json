@@ -144,5 +144,8 @@
   "chatMenuPrompt": "أين أجد القائمة؟",
   "chatLocationPrompt": "أين يقع المطعم؟",
   "chatReservationsPrompt": "كيف أحجز طاولة؟",
-  "conversation": "المحادثة"
+  "conversation": "المحادثة",
+  "demoTitle": "عرض تجريبي غير تجاري",
+  "demoNotice": "الطلبات والحجوزات للمعاينة فقط.",
+  "demoPrepared": "تم تجهيز المعاينة. لم تُرسل أي رسالة."
 }

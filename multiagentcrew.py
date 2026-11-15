@@ -63,6 +63,9 @@ def answer_question(question: str, history: list[dict[str, str]]) -> RestaurantR
                     "to have booked, cancelled, or contacted anyone. Set used_faq only when "
                     "the answer relies on the FAQ. Set refer_to_staff when staff help is needed. "
                     "Return the requested JSON with a concise answer."
+                    + (" This is a non-commercial demo. Do not share phone numbers, email "
+                       "addresses, or external ordering links. Explain that bookings and "
+                       "orders cannot be placed in the demo." if os.getenv("PAK_FOOD_DEMO") == "1" else "")
                 ),
             },
             {

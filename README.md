@@ -90,3 +90,36 @@ Configure the following in `frontend/restaurant.json` and rebuild Next.js:
 For the embedded Google Maps pin picker, set `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` in `frontend/.env.local` before building. Restrict this browser key to the Maps JavaScript API and your allowed website referrers. Set `NEXT_PUBLIC_GOOGLE_MAPS_MAP_ID` to your map ID for production. Without a key, customers can open Google Maps and paste their pin’s share link in checkout.
 
 Cards, Apple Pay, and Google Pay are payment preferences sent in the WhatsApp enquiry until a payment provider is integrated. Checkout collects no card data and charges no payment. Cash is available as a preference, and Tabby and Tamara are marked coming soon.
+
+## Deploy on Vercel with a separate Llama server
+
+Deploy the `frontend` directory as a Next.js project. FastAPI, Ollama, and the writable `db/` directory run on an always-on server.
+
+On the backend server, copy the backend source and bundled Pak Food FAQ. Set a fresh `FAQ_ADMIN_PASSWORD` in the server's root `.env`. To carry over live menu items, offers, or branding, migrate the corresponding SQLite databases into the server's `db/` separately using consistent backups. Copy an active FAQ only if it belongs to this restaurant. Otherwise, the bundled Pak Food FAQ is used.
+
+```sh
+docker compose up -d --build
+docker compose exec ollama ollama pull llama3.2:3b
+curl --fail http://127.0.0.1:8000/branding
+```
+
+Point the server's HTTPS reverse proxy to `127.0.0.1:8000`. Allow enough upstream time for local inference, with a timeout of at least 75 seconds. Ollama is reachable only from within the Compose network. Use the actual backend HTTPS origin as `CREW_API_URL` in Vercel. Keep the admin password on the backend server.
+
+From the local repository root:
+
+```sh
+cd frontend
+npx vercel@latest login
+npx vercel@latest link
+npx vercel@latest env add CREW_API_URL preview
+npx vercel@latest env add CREW_API_URL production
+npx vercel@latest deploy
+```
+
+Check the Vercel preview homepage, menu, FAQ, and a live chatbot reply before deploying production with `npx vercel@latest deploy --prod`. For large FAQ PDFs, use the admin's PDF URL option when the file exceeds the Vercel Functions request-body limit.
+
+### Temporary non-commercial demo
+
+Set `PAK_FOOD_DEMO=1` on the Vercel project and demo API. This keeps checkout and reservation forms available for demonstrations without sending orders or bookings. Start the API from a separate copy of the backend with a fresh admin password and its own empty `db/` directory. It will use the bundled FAQ initially.
+
+If you make this demo API reachable through an HTTPS tunnel, set the same random `CREW_API_TOKEN` on the demo API and in Vercel's server-side environment. The frontend adds this token to backend requests. Set `CREW_API_URL` to the tunnel's HTTPS origin and redeploy after changing it. A Quick Tunnel URL can change when it restarts, and the demo chatbot depends on the host machine, tunnel, and Ollama staying online.
