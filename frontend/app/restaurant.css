@@ -205,10 +205,11 @@ html:has(dialog[open]) { overflow: hidden; }
 .chat-panel .composer input {
   color-scheme: light;
   color: #000;
+  -webkit-text-fill-color: #000;
   caret-color: #000;
   background: #fffaf2;
 }
-.chat-panel .composer input::placeholder { color: #62594f; opacity: 1; }
+.chat-panel .composer input::placeholder { color: #62594f; -webkit-text-fill-color: #62594f; opacity: 1; }
 .restaurant .whatsapp-fab { position: fixed; z-index: 5; inset-inline-start: var(--gutter); bottom: max(16px, env(safe-area-inset-bottom)); display: grid; place-items: center; width: 46px; height: 46px; border-radius: 50%; background: #1a6349; color: #fff; border: 1px solid #ffffff58; box-shadow: 0 9px 24px #0004; }
 
 @media (max-width: 375px) {

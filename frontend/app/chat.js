@@ -77,7 +77,7 @@ export default function Chat({restaurantName}) {
       {error && <p className="error" role="alert">{error}</p>}
       <form className="composer" onSubmit={event => {event.preventDefault(); send(draft);}}>
         <label className="sr-only" htmlFor="question">{t('yourQuestion')}</label>
-        <input id="question" dir="auto" placeholder={t('askQuestion')} maxLength={1000} value={draft} onChange={event => setDraft(event.target.value)} disabled={pending}/>
+        <input id="question" type="text" dir="auto" style={{color: "#000", WebkitTextFillColor: "#000"}} placeholder={t('askQuestion')} maxLength={1000} value={draft} onChange={event => setDraft(event.target.value)} disabled={pending}/>
         <button className="primary" type="submit" disabled={pending || !draft.trim()}>{t('send')}</button>
       </form>
       {messages.length > 0 && (
