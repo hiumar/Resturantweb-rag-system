@@ -1,0 +1,27 @@
+# Python virtual environments
+crewai-env/
+venv/
+.venv/
+env/
+__pycache__/
+*.pyc
+
+# Node
+node_modules/
+.next/
+out/
+dist/
+
+# Secrets
+.env
+.env.local
+.env.*.local
+
+# OS / editor
+.DS_Store
+.vscode/
+.idea/
+
+# Vector DBs / large data (add if you have them)
+*.lance
+chroma_db/

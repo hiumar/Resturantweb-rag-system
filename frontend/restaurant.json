@@ -1,0 +1,20 @@
+{
+  "name": "Pak Food",
+  "phone": "0562410524",
+  "defaultFaq": "output/pdf/Pakfood_FAQ.pdf",
+  "uae": {
+    "vatRate": 5,
+    "openingHours": null,
+    "ramadan": {
+      "enabled": false,
+      "hours": null
+    },
+    "deliveryFees": {},
+    "tradeLicense": null,
+    "halalVerified": false,
+    "foodSafetyGrade": null,
+    "talabatUrl": null,
+    "deliverooUrl": null,
+    "directPromotion": null
+  }
+}
